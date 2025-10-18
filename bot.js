@@ -22,3 +22,4 @@ bot.start((ctx) => {
 
 bot.launch();
 console.log("✅ Бот запущен!");
+
