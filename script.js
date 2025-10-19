@@ -157,4 +157,12 @@ function updateActiveItem() {
   }
   
   spinBtn.addEventListener("click", spin);
+
   
+// === Кнопка "Войти" (справа) ===
+const loginBtnRight = document.getElementById("login-btn-right");
+if (loginBtnRight) {
+  loginBtnRight.addEventListener("click", () => {
+    alert("🔐 Здесь появится форма входа (добавим позже)");
+  });
+}
