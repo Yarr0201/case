@@ -10,7 +10,7 @@ bot.start((ctx) => {
           {
             text: "🎮 Открыть мини-игру",
             web_app: {
-              url: "https://sage-hummingbird-5ede18.netlify.app/"
+              url: "https://case-blush-delta.vercel.app/"
             },
           },
         ],
