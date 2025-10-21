@@ -122,41 +122,66 @@ function updateActiveItem() {
   
   
   /* === Крутилка === */
-  function spin() {
-    spinBtn.disabled = true;
-    resultText.textContent = "🎲 Крутится...";
-  
-    const totalItems = itemsContainer.children.length;
-    const itemWidth = 160;
-    const chosenItem = itemsData[Math.floor(Math.random() * itemsData.length)];
-    const visibleCenter = itemsContainer.parentElement.offsetWidth / 2 - itemWidth / 2;
-  
-    const randomOffset = Math.floor(Math.random() * (totalItems / 2)) * itemWidth;
-    const alignmentFix = -2;
-    const stopPosition = -(randomOffset + itemWidth * itemsData.indexOf(chosenItem)) + visibleCenter + alignmentFix;
-  
-    itemsContainer.style.transition = "none";
-    itemsContainer.style.transform = "translateX(0px)";
-    void itemsContainer.offsetWidth;
-  
-    itemsContainer.style.transition = "transform 5s cubic-bezier(0.05, 0.5, 0.1, 1)";
-    itemsContainer.style.transform = `translateX(${stopPosition}px)`;
-  
-    // Запускаем наблюдение
-    startWatch();
-    itemsContainer.addEventListener("transitionend", stopWatch, { once: true });
-  
-    setTimeout(() => {
-      resultText.textContent = `🎯 Выпало: ${chosenItem.name}`;
-      if (["red", "gold"].includes(chosenItem.rarity)) {
-        triggerFlash();
-        createSparks();
+/* === Крутилка (показываем результат ТОЛЬКО после остановки) === */
+function spin() {
+  // блокируем кнопку на время анимации
+  spinBtn.disabled = true;
+
+  const totalItems = itemsContainer.children.length;
+  const itemWidth = 160;
+
+  // случайный сдвиг
+  const randomOffset = Math.floor(Math.random() * (totalItems / 2)) * itemWidth;
+  const visibleCenter = itemsContainer.parentElement.offsetWidth / 2 - itemWidth / 2;
+  const stopPosition = -(randomOffset) + visibleCenter - 2;
+
+  // сброс и запуск анимации
+  itemsContainer.style.transition = "none";
+  itemsContainer.style.transform = "translateX(0px)";
+  void itemsContainer.offsetWidth;
+
+  itemsContainer.style.transition = "transform 5s cubic-bezier(0.05, 0.5, 0.1, 1)";
+  itemsContainer.style.transform = `translateX(${stopPosition}px)`;
+
+  // подсветка активного во время движения
+  startWatch();
+
+  // когда анимация реально завершилась
+  itemsContainer.addEventListener(
+    "transitionend",
+    () => {
+      // перестаём пересчитывать активный
+      stopWatch();
+
+      // берём ровно ту карточку, что под рамкой (её отметил updateActiveItem)
+      const active = document.querySelector(".item.active");
+      if (active) {
+        const name = active.querySelector(".item-name")?.textContent?.trim() || "—";
+        // показываем результат только СЕЙЧАС
+        resultText.style.opacity = "0";
+        resultText.textContent = `🎯 Выпало: ${name}`;
+        resultText.style.transition = "opacity 0.25s ease";
+        requestAnimationFrame(() => (resultText.style.opacity = "1"));
+
+        // эффекты для редких
+        const rarity =
+          itemsData.find((i) => i.name === name)?.rarity || "";
+        if (["red", "gold"].includes(rarity)) {
+          triggerFlash();
+          createSparks();
+        }
       }
+
+      // разблокируем кнопку
       spinBtn.disabled = false;
-    }, 5000);
-  }
-  
-  spinBtn.addEventListener("click", spin);
+    },
+    { once: true }
+  );
+}
+
+spinBtn.addEventListener("click", spin);
+
+
 
   
 // === Кнопка "Войти" (справа) ===
@@ -166,3 +191,23 @@ if (loginBtnRight) {
     alert("🔐 Здесь появится форма входа (добавим позже)");
   });
 }
+
+
+//Монета
+const balanceDisplay = document.getElementById("balance-display");
+let balance = 0;
+
+function updateBalance(amount) {
+  balance += amount;
+  balanceDisplay.textContent = `💰 ${balance}₽`;
+}
+
+
+// === Подсветка активной кнопки ===
+const navButtons = document.querySelectorAll(".nav-btn");
+navButtons.forEach(btn => {
+  btn.addEventListener("click", () => {
+    navButtons.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
+});
