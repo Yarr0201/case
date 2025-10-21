@@ -10,8 +10,20 @@
 
   <!-- Верхняя полоса -->
   <div class="top-bar">
-    <button id="login-btn-right">🔑 Войти</button>
+    <div class="left-side">
+      <div id="balance-display">💰 0₽</div>
+    </div>
+  
+    <div class="center">
+      <img src="img/logo/logo.png" alt="Fox Logo" class="logo-center">
+    </div>
+  
+    <div class="right-side">
+      <button id="login-btn-right">🔑 Войти</button>
+    </div>
   </div>
+
+  
   
   <div class="case-container">
     <h1>🎯 Открытие кейса</h1>
@@ -21,10 +33,43 @@
       <div class="pointer"></div>
     </div>
 
+    
+
     <button id="spin">Крутить</button>
     <p id="result"></p>
   </div>
 
   <script src="script.js"></script>
+
+  
+<!-- Нижняя панель -->
+<div class="bottom-bar">
+  <button class="nav-btn" id="nav-slots">
+    <img src="img/bottom/slots.png" alt="Слоты">
+    <span>Слоты</span>
+  </button>
+
+  <button class="nav-btn" id="nav-friends">
+    <img src="img/bottom/friends.png" alt="Пригласить">
+    <span>Пригласить</span>
+  </button>
+
+  <button class="nav-btn" id="nav-promo">
+    <img src="img/bottom/promo.png" alt="Акции">
+    <span>Акции</span>
+  </button>
+
+  <button class="nav-btn" id="nav-deposit">
+    <img src="img/bottom/deposit.png" alt="Депозит">
+    <span>Депозит</span>
+  </button>
+
+  <button class="nav-btn" id="nav-profile">
+    <img src="img/bottom/profile.png" alt="Кабинет">
+    <span>Кабинет</span>
+  </button>
+</div>
+
+
 </body>
 </html>
